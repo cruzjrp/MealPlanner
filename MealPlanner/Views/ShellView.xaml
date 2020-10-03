@@ -1,0 +1,890 @@
+﻿<Window x:Class="MealPlanner.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MealPlanner.Views"
+        mc:Ignorable="d" 
+        Title="Meal Planner" Height="720" Width="1280">
+    <Grid>
+        <TabControl Background="#03396c" TabStripPlacement="Left" SelectedIndex="{Binding Path=MainTabControl, Mode=TwoWay}">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                </Style>
+            </TabControl.Resources>
+
+            <!--.-.-.-.-.-.-.-.-.-.-.-.-->
+            <!--Calorie Calculator Tab-->
+            <!--.-.-.-.-.-.-.-.-.-.-.-.-->
+            <TabItem Name="CalorieCalculator" Background="Transparent" Width="50" Height="105" Margin="0,-2" VerticalAlignment="Top">
+                <TabItem.Header>
+                    <!--<Image Source="F:\Saved Files\Downloads\meal-1320568026248944827.png" Stretch="Uniform" Height="50" Width="50"/>--> Calorie Calculator
+                </TabItem.Header>
+                <Grid>
+                    <!--Title-->
+                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="50" TextAlignment="Center" Margin="0,5,0,574" Foreground="White" 
+                               Text="Calorie Calculator"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="17" Margin="0,88,0,530" Foreground="White" TextAlignment="Center">
+                        The Calorie Calculator is used to estimate how many calories a person needs to consume each day, 
+                        and provides a benchmark for how they can lose weight.
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" FontSize="17" Margin="26,518,0,0" Foreground="White">
+                        The Calorie Calculator uses the Mifflin-St. Jeor Equation to calculate the BMR of the person, 
+                        and then multiplies the BMR by a multiplier depending on what the person's activity level is. <LineBreak/> <LineBreak/>
+                        
+                        <Bold> The Mifflin-St. Jeor Equation: </Bold><LineBreak/>
+                        BMR = 10 * (weight in kg) + 6.25 * (height in cm) - 5 * (age) + 5* <LineBreak/>
+                        * For females, change +5 to -161.
+                    </TextBlock>
+
+                    <!--Personal information section-->
+                    <WrapPanel Margin="100,155,718,167">
+                        <!--Age, textbox-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="White" Width="135">Age</TextBlock>
+                        <TextBox x:Name="CalorieCalculatorAge" FontSize="16" Width="120" Margin="5,0,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                        <!--Gender, radiobutton-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="White" Width="135">Gender</TextBlock>
+                        <RadioButton x:Name="CalorieCalculatorMale" FontSize="16" Margin="5,5,0,0" Foreground="White">Male</RadioButton>
+                        <RadioButton x:Name="CalorieCalculatorFemale" FontSize="16" Margin="5,5,0,0" Foreground="White">Female</RadioButton>
+
+                        <!--Height, textbox-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="White" Width="135">Height (in.)</TextBlock>
+                        <TextBox Name="CalorieCalculatorHeight" FontSize="16" Width="120" Margin="5,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                        <!--Weight, textbox-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="White" Width="135">Weight (lbs.)</TextBlock>
+                        <TextBox Name="CalorieCalculatorWeight" FontSize="16" Width="120" Margin="5,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                        <!--Activity, combobox-->
+                        <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="White" Width="135">Activity</TextBlock>
+                        <ComboBox Name="Activities" FontSize="16" Width="230" Margin="5,5,0,0" SelectedItem="{Binding Path=CalorieCalculatorActivity, Mode=TwoWay}"/>
+
+                        <!--Calculate, button-->
+                        <Button x:Name="Calculate" FontSize="16" Width="120" Margin="140,10,5,5" FontWeight="Bold">Calculate</Button>
+
+                        <!--Clear, button-->
+                        <Button x:Name="ClearFields" FontSize="16" Width="60" Margin="5,10,5,5" FontWeight="Bold">Clear</Button>
+
+                        <!--Exercise text-->
+                        <TextBlock TextWrapping="Wrap" FontSize="15" Margin="20, 10, 0, 0" Foreground="White" Width="334"> 
+                            ⚫ <Bold>Exercise:</Bold> 15-30 minutes of elevated heart rate activity <LineBreak/>
+                            ⚫ <Bold>Intense Exercise:</Bold> 15-30 minutes of elevated heart rate activity <LineBreak/>
+                            ⚫ <Bold>Very Intense Exercise:</Bold> 15-30 minutes of elevated heart rate activity</TextBlock>
+                    </WrapPanel>
+
+                    <!--Daily Calorie Intake Section-->
+                    <WrapPanel Margin="695,150,100,172">
+                        <!--Titles-->
+                        <Border Height="50" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="215" Background="LightGray" Height="47" FontWeight="Bold">Type of Weight Loss</TextBlock>
+                        </Border>
+
+                        <Border Height="50" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="185" Background="LightGreen" Height="47" FontWeight="Bold">Calories/day</TextBlock>
+                        </Border>
+
+                        <!--Maintain Weight-->
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="215" Background="LightGray" Height="60">Maintain Weight</TextBlock>
+                        </Border>
+
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Name="CalorieCalculatorMaintainWeight" Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="185" Background="LightGreen" Height="60" FontWeight="Bold"></TextBlock>
+                        </Border>
+
+                        <!--Mild Weight Loss-->
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="215" Background="LightGray" Height="60">Mild Weight Loss <LineBreak/> 
+                    <Span Foreground="Gray" FontSize="17">0.5 lbs/week</Span></TextBlock>
+                        </Border>
+
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Name="CalorieCalculatorMildWeightLoss" Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="185" Background="LightGreen" Height="60" FontWeight="Bold"></TextBlock>
+                        </Border>
+
+                        <!--Weight Loss-->
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="215" Background="LightGray" Height="60">Weight Loss <LineBreak/> 
+                    <Span Foreground="Gray" FontSize="17">1 lb/week</Span></TextBlock>
+                        </Border>
+
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Name="CalorieCalculatorWeightLoss" Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="185" Background="LightGreen" Height="60" FontWeight="Bold"></TextBlock>
+                        </Border>
+
+                        <!--Mild Weight Loss-->
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="215" Background="LightGray" Height="60">Extreme Weight Loss <LineBreak/> 
+                    <Span Foreground="Gray" FontSize="17">2 lbs/week</Span></TextBlock>
+                        </Border>
+
+                        <Border Height="60" BorderThickness="1" BorderBrush="Black">
+                            <TextBlock Name="CalorieCalculatorExtremeWeightLoss" Padding="7" TextWrapping="Wrap" FontSize="20" TextAlignment="Center" Foreground="Black" Width="185" Background="LightGreen" Height="60" FontWeight="Bold"></TextBlock>
+                        </Border>
+                        <TextBlock TextWrapping="Wrap" FontSize="15" Margin="2, 5, 0, 0" Foreground="White" Width="408">
+                            <Bold>Note:</Bold> Please consult a doctor if you are planning to consume less than the recommended calories a day (1500 cal.).
+                        </TextBlock>
+                    </WrapPanel>
+
+                    <!--Continue, button-->
+                    <Border BorderThickness="1">
+                        <Button x:Name="CalorieCalculatorContinue" FontSize="16" FontWeight="Bold" Content="Continue" Margin="1058,590,30,30" />
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!--.-.-.-.-.-.-.-.-->
+            <!--Diet Plans Tab-->
+            <!--.-.-.-.-.-.-.-.-->
+            <TabItem Name="DietPlans" Header="Diet Plans">
+                <Grid>
+                    <WrapPanel>
+                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="50" TextAlignment="Center" Foreground="White" Text="Diet Plans" Width="1212" Height="70"/>
+
+                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,15,0,5" Foreground="White" Width="1208">How many pounds do you want to lose a week?</TextBlock>
+                        <RadioButton Name="DietPlansHalfLbAWeek" FontSize="16" Margin="50,5,0,0" Foreground="White" GroupName="PoundsLost">0.5 lbs. a week</RadioButton>
+                        <RadioButton Name="DietPlansOneLbAWeek" FontSize="16" Margin="200,5,0,0" Foreground="White" GroupName="PoundsLost">1 lbs. a week</RadioButton>
+                        <RadioButton Name="DietPlansTwoLbsAWeek" FontSize="16" Margin="200,5,0,0" Foreground="White" GroupName="PoundsLost" Visibility="{Binding Path=DietPlansTwoLbsAWeekIsVisible, Mode=OneWay}">2 lbs. a week</RadioButton>
+
+                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,15,0,5" Foreground="White" Width="1208">What kind of weekly calorie plan do you want to follow?</TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontSize="17" Margin="15,0,0,5" Foreground="White">
+                        The calorie plans in this app focus on what is called zigzag calorie cycling. It involves staggering a low-calorie diet with high-calorie days. 
+                            The idea is that if you can keep your body guessing, you can avoid homeostasis. So by confusing the body, the hope is that the person's 
+                            metabolism will shift into high gear burning calories more efficiently.
+                        </TextBlock>
+
+                        <RadioButton Name="DietPlansZigzagPlanOne" FontSize="16" Margin="50,5,0,0" Foreground="White" GroupName="ZigzagPlans">Zigzag Plan 1</RadioButton>
+                        <RadioButton Name="DietPlansZigzagPlanTwo" FontSize="16" Margin="200,5,0,0" Foreground="White" GroupName="ZigzagPlans">Zigzag Plan 2</RadioButton>
+                        <RadioButton Name="DietPlansNoZigzagPlan" FontSize="16" Margin="200,5,0,0" Foreground="White" GroupName="ZigzagPlans">No Zigzag</RadioButton>
+
+                        <TextBlock Margin="0,0,300,0" Width="138"></TextBlock>
+
+                        <!--Zigzag Plan 1 Table-->
+                        <WrapPanel Height="365" Width="251">
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,15,0,0">Sunday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneSunday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray" Margin="0,15,0,0">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Monday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneMonday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Tuesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneTuesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Wednesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneWednesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Thursday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneThursday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Friday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneFriday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="15,0,0,0">Saturday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagOneSaturday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+                        </WrapPanel>
+
+                        <!--Zigzag Plan 2 Table-->
+                        <WrapPanel Height="365" Width="251" Margin="40,0,0,0">
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,15,0,0">Sunday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoSunday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray" Margin="0,15,0,0">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Monday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoMonday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Tuesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoTuesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Wednesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoWednesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Thursday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoThursday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Friday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoFriday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Saturday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansZigzagTwoSaturday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+                        </WrapPanel>
+
+                        <!--No Zigzag Plan Table-->
+                        <WrapPanel Height="365" Width="251" Margin="55,0,0,0">
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,15,0,0">Sunday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagSunday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray" Margin="0,15,0,0">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Monday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagMonday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Tuesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagTuesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Wednesday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagWednesday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Thursday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagThursday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Friday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagFriday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+
+                            <Border BorderThickness="1">
+                                <TextBlock Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="100" Background="LightGray" Margin="30,0,0,0">Saturday</TextBlock>
+                            </Border>
+                            <Border BorderThickness="1">
+                                <TextBlock Name="DietPlansNoZigzagSaturday" Padding="7" TextWrapping="Wrap" FontSize="16" TextAlignment="Center" Foreground="Black" Width="92" Background="LightGray">0</TextBlock>
+                            </Border>
+                        </WrapPanel>
+
+                    </WrapPanel>
+                    <TextBlock TextWrapping="Wrap" FontSize="17" Margin="10,599,326,49" Foreground="White">
+                             <Bold>Note:</Bold> Please consult a doctor if you are planning to consume less than the recommended calories a day (1500 cal.).
+                    </TextBlock>
+
+                    <!--Calculate, button-->
+                    <Border BorderThickness="1">
+                        <Button x:Name="DietPlansContinue" FontSize="16" FontWeight="Bold" Content="Continue" Margin="1058,590,30,30" />
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!--.-.-.-.-..-.-.-.-->
+            <!--Meal Planner Tab-->
+            <!--.-.-.-.-..-.-.-.-->
+            <TabItem Name="MealPlanner" Header="Meal Planner">
+                <WrapPanel>
+                    <TabControl Height="690" Width="1217" Background="#03396c">
+                        <!--OVERVIEW TAB-->
+                        <TabItem Name="MealPlanner_Overview" Header="Overview" Style="{x:Null}">
+
+                        </TabItem>
+
+                        <!--SUNDAY TAB-->
+                        <TabItem Name="MealPlanner_Sunday" Header="Sunday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">SUNDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Sunday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="SundayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SundayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSundayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Sunday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="SundayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SundayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSundayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Sunday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="SundayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SundayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SundayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSundayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Sunday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="SundayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSundayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Sunday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="SundaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SundaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SundaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSundaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Sunday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories: </TextBlock>
+                                    <TextBlock x:Name="MealPlannerSundayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding SundayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerSundaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerSundayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--MONDAY TAB-->
+                        <TabItem Name="MealPlanner_Monday" Header="Monday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">MONDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Monday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="MondayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="MondayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearMondayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Monday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="MondayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="MondayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearMondayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Monday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="MondayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="MondayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=MondayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearMondayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Monday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="MondayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearMondayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Monday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="MondaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="MondaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding MondaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearMondaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Monday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerMondayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding MondayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerMondaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerMondayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+                        
+                        <!--TUESDAY TAB-->
+                        <TabItem Name="MealPlanner_Tuesday" Header="Tuesday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">TUESDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Tuesday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="TuesdayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="TuesdayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearTuesdayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Tuesday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="TuesdayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="TuesdayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearTuesdayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Tuesday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="TuesdayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="TuesdayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=TuesdayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearTuesdayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Tuesday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="TuesdayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearTuesdayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Tuesday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="TuesdaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="TuesdaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding TuesdaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearTuesdaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Tuesday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerTuesdayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding TuesdayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerTuesdaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerTuesdayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--WEDNESDAY TAB-->
+                        <TabItem Name="MealPlanner_Wednesday" Header="Wednesday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">WEDNESDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Wednesday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="WednesdayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="WednesdayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearWednesdayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Wednesday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="WednesdayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="WednesdayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearWednesdayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Wednesday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="WednesdayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="WednesdayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=WednesdayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearWednesdayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Wednesday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="WednesdayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearWednesdayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Wednesday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="WednesdaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="WednesdaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding WednesdaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearWednesdaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Wednesday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerWednesdayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding WednesdayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerWednesdaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerWednesdayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--THURSDAY TAB-->
+                        <TabItem Name="MealPlanner_Thursday" Header="Thursday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">THURSDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Thursday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="ThursdayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="ThursdayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearThursdayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Thursday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="ThursdayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="ThursdayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearThursdayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Thursday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="ThursdayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="ThursdayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=ThursdayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearThursdayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Thursday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="ThursdayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearThursdayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Thursday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="ThursdaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="ThursdaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding ThursdaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearThursdaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Thursday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerThursdayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding ThursdayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerThursdaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerThursdayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--FRIDAY TAB-->
+                        <TabItem Name="MealPlanner_Friday" Header="Friday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">FRIDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Friday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="FridayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="FridayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearFridayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Friday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="FridayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="FridayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearFridayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Friday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="FridayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="FridayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=FridayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearFridayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Friday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="FridayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearFridayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Friday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="FridaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="FridaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding FridaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearFridaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Friday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerFridayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding FridayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerFridaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerFridayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--SATURDAY TAB-->
+                        <TabItem Name="MealPlanner_Saturday" Header="Saturday" Style="{x:Null}">
+                            <Grid>
+                                <!--Header-->
+                                <WrapPanel Margin="0,0,10,492">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="100" Margin="15,15,0,5" Foreground="White">SATURDAY</TextBlock>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,166,0,0">
+                                    <!--Saturday Breakfast-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Breakfast</TextBlock>
+                                        <ComboBox Name="SaturdayBreakfastOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayBreakfastOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SaturdayBreakfastTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayBreakfastTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSaturdayBreakfast" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Saturday Lunch-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Lunch</TextBlock>
+                                        <ComboBox Name="SaturdayLunchOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayLunchOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SaturdayLunchTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayLunchTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSaturdayLunch" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Saturday Dinner-->
+                                    <WrapPanel Height="186" Width="278">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Dinner</TextBlock>
+                                        <ComboBox Name="SaturdayDinnerOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayDinnerOneSelectedMeal, Mode=TwoWay}"/>
+                                        <ComboBox Name="SaturdayDinnerTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding Path=SaturdayDinnerTwoSelectedMeal, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSaturdayDinner" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Saturday Beverages-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White">Beverages</TextBlock>
+                                        <ComboBox x:Name="SaturdayBeverageOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdayBeverageOneSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdayBeverageTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdayBeverageTwoSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdayBeverageThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdayBeverageThreeSelectedBeverage, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdayBeverageFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdayBeverageFourSelectedBeverage, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSaturdayBeverages" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+                                    <!--Saturday Snacks-->
+                                    <WrapPanel Height="250" Width="278" Margin="96,0,0,0">
+                                        <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="40" Margin="15,15,0,5" Foreground="White"><Run Text="Snacks"/></TextBlock>
+                                        <ComboBox x:Name="SaturdaySnackOne" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdaySnackOneSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdaySnackTwo" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdaySnackTwoSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdaySnackThree" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdaySnackThreeSelectedSnack, Mode=TwoWay}"/>
+                                        <ComboBox x:Name="SaturdaySnackFour" FontSize="16" Width="200" Height="27" Margin="15,5,0,0" SelectedIndex="{Binding SaturdaySnackFourSelectedSnack, Mode=TwoWay}"/>
+                                        <Button x:Name="ClearSaturdaySnacks" FontSize="16" Width="60" Margin="155,10,5,5" FontWeight="Bold">Clear</Button>
+                                    </WrapPanel>
+
+                                    <!--Saturday Total Calories-->
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="50,250,0,5" Foreground="White">Total Calories:</TextBlock>
+                                    <TextBlock x:Name="MealPlannerSaturdayCurrentCalories" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="15,250,0,5" Foreground="{Binding SaturdayCurrentCaloriesColor, Mode=TwoWay}">0</TextBlock>
+                                    <TextBlock x:Name="MealPlannerSaturdaySlash" TextWrapping="Wrap" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">/</TextBlock>
+                                    <TextBlock x:Name="MealPlannerSaturdayTotalCalories" FontWeight="Bold" FontSize="30" Margin="0,250,0,5" Foreground="White">0</TextBlock>
+                                </WrapPanel>
+                            </Grid>
+                        </TabItem>
+
+                        <!--FOOD DATABASE TAB-->
+                        <TabItem Name="MealPlanner_FoodDatabase" Header="Food Database" Style="{x:Null}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="173*"/>
+                                    <ColumnDefinition Width="13*"/>
+                                    <ColumnDefinition Width="1021*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Ingredient Table section -->
+                                <ListView Name="IngredientDatabase" Height="320" Margin="0,0,865,338" SelectedIndex="{Binding Path=SelectedIngredient, Mode=OneWayToSource}" Grid.ColumnSpan="3">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Ingredient Name" Width="150" DisplayMemberBinding="{Binding Name}"  />
+                                            <GridViewColumn Header="Calories" Width="60" DisplayMemberBinding="{Binding Calories}" />
+                                            <GridViewColumn Header="Amount" Width="60" DisplayMemberBinding="{Binding Amount}" />
+                                            <GridViewColumn Header="Unit" Width="60" DisplayMemberBinding="{Binding Unit}" />
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <!-- Ingredient CRUD section-->
+                                <WrapPanel Margin="180,0,0,338" Grid.Column="2">
+                                    <!-- ADD INGREDIENT -->
+                                    <TextBlock TextWrapping="Wrap" FontSize="30" FontWeight="Bold" TextAlignment="Left" Foreground="White" Margin="10,5,0,5" Width="826">Add Ingredient</TextBlock>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Name</TextBlock>
+                                    <TextBox x:Name="AddIngredientName" FontSize="16" Width="200" Height="25" Margin="10,5,0,0"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Calories</TextBlock>
+                                    <TextBox x:Name="AddIngredientCalories" FontSize="16" Width="60" Height="25" Margin="10,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Amount</TextBlock>
+                                    <TextBox x:Name="AddIngredientAmount" FontSize="16" Width="60" Height="25" Margin="10,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Unit</TextBlock>
+
+                                    <ComboBox Name="Units" FontSize="16" Width="90" Margin="10,5,0,0" SelectedItem="{Binding Path=AddIngredientUnit, Mode=TwoWay}"/>
+
+                                    <Button Name="AddIngredient" FontSize="15" Width="130" Height="25" FontWeight="Bold" Margin="20,5,0,0">Add Ingredient</Button>
+
+                                    <!-- EDIT INGREDIENT -->
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="30" FontWeight="Bold" TextAlignment="Left" Foreground="White" Margin="10,50,0,5" Width="826">Edit Ingredient</TextBlock>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Name</TextBlock>
+                                    <TextBox x:Name="EditIngredientName" FontSize="16" Width="200" Height="25" Margin="10,5,0,0"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Calories</TextBlock>
+                                    <TextBox x:Name="EditIngredientCalories" FontSize="16" Width="60" Height="25" Margin="10,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Amount</TextBlock>
+                                    <TextBox x:Name="EditIngredientAmount" FontSize="16" Width="60" Height="25" Margin="10,5,0,0" PreviewTextInput="NumberValidationTextBox"/>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="10,5,0,0">Unit</TextBlock>
+
+                                    <ComboBox Name="UnitsEdit" FontSize="16" Width="90" Margin="10,5,0,0" SelectedItem="{Binding Path=EditIngredientUnit, Mode=TwoWay}"/>
+
+                                    <Button Name="EditIngredient" FontSize="15" Width="130" Height="25" FontWeight="Bold" Margin="20,5,0,0">Edit Ingredient</Button>
+
+                                    <TextBlock Width="663"></TextBlock>
+
+                                    <Button x:Name="DeleteIngredient" FontSize="14.5" Width="130" Height="25" FontWeight="Bold" Margin="20,10,0,0" Content="Delete Ingredient"/>
+
+                                </WrapPanel>
+
+
+                                <!-- Meal Table section -->
+                                <ListView Name="MealDatabase" Height="320" Margin="648,320,10,18" SelectedIndex="{Binding Path=SelectedMeal, Mode=OneWayToSource}" Grid.Column="2">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Meal Name" Width="250" DisplayMemberBinding="{Binding Name}"  />
+                                            <GridViewColumn Header="Total Calories" Width="100" DisplayMemberBinding="{Binding TotalCalories}" />
+
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+
+                                <WrapPanel Margin="156,274,393,0" Grid.Column="2">
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="30" FontWeight="Bold" TextAlignment="Left" Foreground="White" Margin="90,0,0,5" Width="148">Add Meal</TextBlock>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="222,0,0,0">Name</TextBlock>
+                                    <TextBox x:Name="AddMealName" FontSize="16" Width="200" Height="25" Margin="10,0,0,0"/>
+
+                                    <ComboBox Name="AddMealIngredientDatabase" FontSize="16" Width="130" Height="27" Margin="222,5,0,0" SelectedIndex="{Binding Path=AddMealSelectedIngredient, Mode=TwoWay}"/>
+                                    <Button Name="AddIngredientToMeal" FontSize="14.5" Width="110" Height="25" FontWeight="Bold" Margin="10,5,0,0" Content="Add To Meal"/>
+
+                                    <ListView Name="AddMealIngredients" Height="226" Margin="90,5,0,0" SelectedIndex="{Binding Path=SelectedMealIngredient, Mode=OneWayToSource}" Width="382">
+                                        <ListView.Resources>
+                                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                            </Style>
+                                        </ListView.Resources>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Ingredient Name" Width="150" DisplayMemberBinding="{Binding Name}"  />
+                                                <GridViewColumn Header="Calories" Width="60" DisplayMemberBinding="{Binding Calories}" />
+                                                <GridViewColumn Header="Amount" Width="60" DisplayMemberBinding="{Binding Amount}" />
+                                                <GridViewColumn Header="Unit" Width="60" DisplayMemberBinding="{Binding Unit}" />
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+
+                                    <TextBlock TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="90,5,0,0">Total Calories:</TextBlock>
+                                    <TextBlock Name="AddMealTotalCalories" TextWrapping="Wrap" FontSize="15" TextAlignment="Left" Foreground="White" Margin="5,5,0,0" Width="34" MaxWidth="34"></TextBlock>
+
+                                    <Button x:Name="DeleteMealIngredient" FontSize="14.5" Width="130" Height="25" FontWeight="Bold" Margin="5,5,0,0" Content="Delete Ingredient"/>
+                                    <Button Name="AddMeal" FontSize="14.5" Width="110" Height="25" FontWeight="Bold" Margin="5,5,0,0" Content="Add Meal"/>
+                                </WrapPanel>
+
+                                <Button x:Name="DeleteMeal" FontSize="14.5" Width="130" Height="25" FontWeight="Bold" Margin="882,288,9,345" Content="Delete Meal" Grid.Column="2"/>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </WrapPanel>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
